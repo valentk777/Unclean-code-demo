@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChristmasTreeDeliveryApp", "ChristmasTreeDeliveryApp\ChristmasTreeDeliveryApp.csproj", "{3C3EC683-70AC-4C3C-B5AE-FF68A5CB2375}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChristmasTreeDeliveryApp2", "ChristmasTreeDeliveryApp2\ChristmasTreeDeliveryApp2.csproj", "{D21841FE-5704-4BC1-9053-CEF7F8C02BCB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChristmasTreeDeliveryApp3", "ChristmasTreeDeliveryApp3\ChristmasTreeDeliveryApp3.csproj", "{AB369B79-A9AC-401C-9221-1A4DE846D5F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{3C3EC683-70AC-4C3C-B5AE-FF68A5CB2375}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C3EC683-70AC-4C3C-B5AE-FF68A5CB2375}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C3EC683-70AC-4C3C-B5AE-FF68A5CB2375}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D21841FE-5704-4BC1-9053-CEF7F8C02BCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D21841FE-5704-4BC1-9053-CEF7F8C02BCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D21841FE-5704-4BC1-9053-CEF7F8C02BCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D21841FE-5704-4BC1-9053-CEF7F8C02BCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB369B79-A9AC-401C-9221-1A4DE846D5F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB369B79-A9AC-401C-9221-1A4DE846D5F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB369B79-A9AC-401C-9221-1A4DE846D5F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB369B79-A9AC-401C-9221-1A4DE846D5F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
