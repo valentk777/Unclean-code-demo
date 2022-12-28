@@ -1,5 +1,11 @@
+using System.ComponentModel;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Metrics;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using ChristmasTreeDeliveryApp3.Controllers;
 
 namespace ChristmasTreeDeliveryApp3.Controllers
 {
@@ -26,25 +32,59 @@ namespace ChristmasTreeDeliveryApp3.Controllers
             {
                 var db = new Database();
 
-                foreach (var result in db.GetAll(type))
+                foreach (var result in db.AllTrees(type))
                 {
-                    trees.Add(result);
+                    if (result != null)
+                    {
+                        trees.Add(result);
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
             }
 
             return Ok(trees);
         }
 
+        public class Get2Request
+        {
+            public int type { get; set; }
+        }
+
         [HttpGet]
         [Route("GetAllTreesByType")]
-        public ActionResult<List<TreeObjectDtoData>> Get2([FromBody] PresentsType type)
+        public ActionResult<List<TreeObjectDtoData>> Get2([FromQuery] Get2Request request)
         {
             var trees = new List<TreeObjectDtoData>();
-            var db = new Database();
 
-            foreach (var result in db.GetAll(type))
+            foreach (var new_type in new List<PresentsType>()
             {
-                trees.Add(result);
+                PresentsType.RedcedarTree, PresentsType.CedarTree, PresentsType.ConiferTree, PresentsType.CypressTree, PresentsType.FirTree
+            })
+            {
+                var db = new Database();
+
+                foreach (var result in db.AllTrees(new_type))
+                {
+                    if (result != null)
+                    {
+                        if ((int)result.TreeType == request.type)
+                        {
+                            trees.Add(result);
+                        }
+                        else
+                        {
+                            _logger.LogError("nothing to log");
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
             }
 
             return Ok(trees);
@@ -55,8 +95,17 @@ namespace ChristmasTreeDeliveryApp3.Controllers
         public async Task<ActionResult> Add1([Microsoft.AspNetCore.Mvc.FromBody] TreeObjectDtoData data)
         {
             var db = new Database();
-            db.SaveTree(data.TreeName, data.TreeType, data.TreeDeliveredTo);
-            return Ok();
+            var result = db.SaveTree(data.TreeName, data.TreeType, data.TreeDeliveredTo);
+
+            if (result.Item1 == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                throw new EntryPointNotFoundException("results is not okay");
+                return Conflict();
+            }
         }
     }
 

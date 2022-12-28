@@ -1,5 +1,10 @@
 ﻿using System.Diagnostics.Metrics;
 using System.IO;
+using System.IO;
+using System.IO;
+using System.IO;
+using System.IO;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 using System.Text;
 using ChristmasTreeDeliveryApp3.Controllers;
@@ -12,13 +17,13 @@ namespace ChristmasTreeDeliveryApp3
         {
 
         }
-        //TODO: return tuple. oh that would be bad :D 
+
         /// <summary>
         /// RETURN ALL trees by type.
         /// </summary>
         /// <param name="type">type.</param>
         /// <exception cref="EntryPointNotFoundException"></exception>
-        public List<TreeObjectDtoData> GetAll(PresentsType type)
+        public List<TreeObjectDtoData> AllTrees(PresentsType type)
         {
             StreamReader file = null;
             var trees = new List<TreeObjectDtoData>();
@@ -153,6 +158,7 @@ namespace ChristmasTreeDeliveryApp3
                         }
                         break;
                     default:
+                        // this line throw exception;
                         throw new EntryPointNotFoundException();
                         break;
                 }
@@ -173,44 +179,82 @@ namespace ChristmasTreeDeliveryApp3
             return trees;
         }
 
-        public void SaveTree(String name, PresentsType type, string to)
+        /// <summary>
+        /// This function only save to file new provided request.
+        /// </summary>
+        /// <param name="name">Name.</param>
+        /// <param name="type">Tree type.</param>
+        /// <param name="to">Getter</param>
+        /// <returns></returns>
+        public Tuple<bool, TreeObjectDtoData?> SaveTree(String name, PresentsType type, string to)
         {
             // Get hash id of provided tree
+            // create new object
             MD5 md5Hasher = MD5.Create();
+            // create new variable
             var newHashId = 0;
 
+            // calculate hash
             var hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(name));
+            // get int
             var ivalue = BitConverter.ToInt32(hashed, 0);
+            // add int
             newHashId += ivalue;
 
+            // calculate hash
             hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(to));
+            // get int
             ivalue = BitConverter.ToInt32(hashed, 0);
+            // add int
             newHashId += ivalue;
 
-            // read file and check if we not save same record before
-            StreamReader file = new("treeRecord.txt");
-            string ln = file.ReadLine();
-            while (ln != null)
+            StreamReader file = null;
+
+            try
             {
-                var data = ln.Split(";");
-                var oldHashId = 0;
+                // read file and check if we not save same record before
+                file = new("treeRecord.txt");
 
-                hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(data[0]));
-                ivalue = BitConverter.ToInt32(hashed, 0);
-                oldHashId += ivalue;
-
-                hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(data[2]));
-                ivalue = BitConverter.ToInt32(hashed, 0);
-                oldHashId += ivalue;
-
-                if (oldHashId != newHashId)
+                string ln = file.ReadLine();
+                while (ln != null)
                 {
-                    continue;
+                    var data = ln.Split(";");
+                    var oldHashId = 0;
+
+                    hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(data[0]));
+                    ivalue = BitConverter.ToInt32(hashed, 0);
+                    oldHashId += ivalue;
+
+                    hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(data[2]));
+                    ivalue = BitConverter.ToInt32(hashed, 0);
+                    oldHashId += ivalue;
+
+                    if (oldHashId != newHashId)
+                    {
+                        ln = file.ReadLine();
+                        continue;
+                    }
+                    else
+                    {
+                        return new Tuple<bool, TreeObjectDtoData?>(true, null);
+                    }
+                }
+            }
+            catch
+            {
+                // do nothing
+            }
+            finally
+            {
+                if (file == null)
+                {
+                    // do nothing
                 }
                 else
                 {
-                    return;
+                    file.Close();
                 }
+
             }
 
             // note: we allow to buy only one tree with same tree name for same requestor.
@@ -225,13 +269,21 @@ namespace ChristmasTreeDeliveryApp3
 
             string sss = "";
 
+            // Add text
             sss += saveThis.TreeName;
+            // Add text
             sss += ";";
+            // Add text
             sss += saveThis.TreeType;
+            // Add text
             sss += ";";
+            // Add text
             sss += saveThis.TreeDeliveredTo;
+            // Add text
             sss += ";";
+            // Add text
             sss += saveThis.TreeDeliveredDate.ToString("yyyy-MM-dd HH:mm:ss,fff");
+            // Add text
             sss += ";";
 
             try
@@ -247,7 +299,11 @@ namespace ChristmasTreeDeliveryApp3
                 StreamWriter writter = new StreamWriter("treeRecord.txt", append: true);
                 writter.WriteLine(sss);
                 writter.Close();
+
+                return new Tuple<bool, TreeObjectDtoData?>(false, saveThis );
             }
+
+            return new Tuple<bool, TreeObjectDtoData?>(true, saveThis );
         }
     }
 
