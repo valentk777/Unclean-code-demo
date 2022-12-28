@@ -6,6 +6,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using ChristmasTreeDeliveryApp3.Controllers;
+using ChristmasTreeDeliveryApp3.DtoData;
 
 namespace ChristmasTreeDeliveryApp3.Controllers
 {
@@ -107,17 +108,6 @@ namespace ChristmasTreeDeliveryApp3.Controllers
                 return Conflict();
             }
         }
-    }
-
-    public class TreeObjectDtoData
-    {
-        public string TreeName { get; set; }
-
-        public PresentsType TreeType { get; set; }
-
-        public string TreeDeliveredTo { get; set; }
-
-        public DateTime TreeDeliveredDate { get; set; } = DateTime.UtcNow;
     }
 }
 

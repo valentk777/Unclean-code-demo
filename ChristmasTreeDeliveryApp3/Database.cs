@@ -1,13 +1,13 @@
 ﻿using System.Diagnostics.Metrics;
 using System.IO;
-using System.IO;
-using System.IO;
-using System.IO;
-using System.IO;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 using System.Text;
+using System.Xml.Linq;
 using ChristmasTreeDeliveryApp3.Controllers;
+using ChristmasTreeDeliveryApp3.DtoData;
+using static System.Net.WebRequestMethods;
+using File = System.IO.File;
 
 namespace ChristmasTreeDeliveryApp3
 {
@@ -18,6 +18,32 @@ namespace ChristmasTreeDeliveryApp3
 
         }
 
+        private void Name(StreamReader? file, PresentsType type, List<TreeObjectDtoData> trees)
+        {
+            if (File.Exists("treeRecord.txt"))
+            {
+                file = new("treeRecord.txt");
+                string ln = string.Empty;
+                while (file.ReadLine() != null)
+                {
+                    ln = file.ReadLine();
+                    var data = ln.Split(";");
+
+                    if (data[1] == type.ToString())
+                    {
+                        trees.Add(new TreeObjectDtoData
+                        {
+                            TreeName = data[0],
+                            TreeType = type,
+                            TreeDeliveredTo = data[2],
+                            TreeDeliveredDate = DateTime.ParseExact(data[3], "yyyy-MM-dd HH:mm:ss,fff",
+                               System.Globalization.CultureInfo.InvariantCulture)
+                        });
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// RETURN ALL trees by type.
         /// </summary>
@@ -25,7 +51,7 @@ namespace ChristmasTreeDeliveryApp3
         /// <exception cref="EntryPointNotFoundException"></exception>
         public List<TreeObjectDtoData> AllTrees(PresentsType type)
         {
-            StreamReader file = null;
+            StreamReader? file = null;
             var trees = new List<TreeObjectDtoData>();
 
             try
@@ -33,134 +59,28 @@ namespace ChristmasTreeDeliveryApp3
                 switch (type)
                 {
                     case PresentsType.RedcedarTree:
-                        if (File.Exists("treeRecord.txt"))
-                        {
-                            file = new("treeRecord.txt");
-                            string ln = file.ReadLine();
-                            while (ln != null)
-                            {
-                                var data = ln.Split(";");
+                        Name(file, PresentsType.RedcedarTree, trees);
 
-                                if (data[1] == PresentsType.RedcedarTree.ToString())
-                                {
-                                    trees.Add(new TreeObjectDtoData
-                                    {
-                                        TreeName = data[0],
-                                        TreeType = PresentsType.RedcedarTree,
-                                        TreeDeliveredTo = data[2],
-                                        TreeDeliveredDate = DateTime.ParseExact(data[3], "yyyy-MM-dd HH:mm:ss,fff",
-                                           System.Globalization.CultureInfo.InvariantCulture)
-                                    });
-                                }
-
-                                ln = file.ReadLine();
-                            }
-                        }
                         break;
                     case PresentsType.CedarTree:
-                        if (File.Exists("treeRecord.txt"))
-                        {
-                            file = new("treeRecord.txt");
-                            string ln = file.ReadLine();
-                            while (ln != null)
-                            {
-                                var data = ln.Split(";");
+                        Name(file, PresentsType.CedarTree, trees);
 
-                                if (data[1] == PresentsType.CedarTree.ToString())
-                                {
-                                    trees.Add(new TreeObjectDtoData
-                                    {
-                                        TreeName = data[0],
-                                        TreeType = PresentsType.CedarTree,
-                                        TreeDeliveredTo = data[2],
-                                        TreeDeliveredDate = DateTime.ParseExact(data[3], "yyyy-MM-dd HH:mm:ss,fff",
-                                           System.Globalization.CultureInfo.InvariantCulture)
-                                    });
-                                }
-
-                                ln = file.ReadLine();
-                            }
-                        }
                         break;
                     case PresentsType.ConiferTree:
-                        if (File.Exists("treeRecord.txt"))
-                        {
-                            file = new("treeRecord.txt");
-                            string ln = file.ReadLine();
-                            while (ln != null)
-                            {
-                                var data = ln.Split(";");
+                        Name(file, PresentsType.ConiferTree, trees);
 
-                                if (data[1] == PresentsType.ConiferTree.ToString())
-                                {
-                                    trees.Add(new TreeObjectDtoData
-                                    {
-                                        TreeName = data[0],
-                                        TreeType = PresentsType.ConiferTree,
-                                        TreeDeliveredTo = data[2],
-                                        TreeDeliveredDate = DateTime.ParseExact(data[3], "yyyy-MM-dd HH:mm:ss,fff",
-                                           System.Globalization.CultureInfo.InvariantCulture)
-                                    });
-                                }
-
-                                ln = file.ReadLine();
-                            }
-                        }
                         break;
                     case PresentsType.CypressTree:
-                        if (File.Exists("treeRecord.txt"))
-                        {
-                            file = new("treeRecord.txt");
-                            string ln = file.ReadLine();
-                            while (ln != null)
-                            {
-                                var data = ln.Split(";");
+                        Name(file, PresentsType.CypressTree, trees);
 
-                                if (data[1] == PresentsType.CypressTree.ToString())
-                                {
-                                    trees.Add(new TreeObjectDtoData
-                                    {
-                                        TreeName = data[0],
-                                        TreeType = PresentsType.CypressTree,
-                                        TreeDeliveredTo = data[2],
-                                        TreeDeliveredDate = DateTime.ParseExact(data[3], "yyyy-MM-dd HH:mm:ss,fff",
-                                           System.Globalization.CultureInfo.InvariantCulture)
-                                    });
-                                }
-
-                                ln = file.ReadLine();
-                            }
-                        }
                         break;
                     case PresentsType.FirTree:
-                        if (File.Exists("treeRecord.txt"))
-                        {
-                            file = new("treeRecord.txt");
-                            string ln = file.ReadLine();
-                            while (ln != null)
-                            {
-                                var data = ln.Split(";");
+                        Name(file, PresentsType.FirTree, trees);
 
-                                if (data[1] == PresentsType.FirTree.ToString())
-                                {
-                                    trees.Add(new TreeObjectDtoData
-                                    {
-                                        TreeName = data[0],
-                                        TreeType = PresentsType.FirTree,
-                                        TreeDeliveredTo = data[2],
-                                        TreeDeliveredDate = DateTime.ParseExact(data[3], "yyyy-MM-dd HH:mm:ss,fff",
-                                           System.Globalization.CultureInfo.InvariantCulture)
-                                    });
-                                }
-
-                                ln = file.ReadLine();
-                            }
-                        }
                         break;
                     default:
                         // this line throw exception;
                         throw new EntryPointNotFoundException();
-                        break;
                 }
             }
             catch
@@ -172,12 +92,24 @@ namespace ChristmasTreeDeliveryApp3
                 if (file != null)
                 {
                     file.Close();
-                    file = null;
+                    //file = null;
                 }
             }
 
             return trees;
         }
+
+
+        private int SecondName(MD5 md5Hasher, int newHashId, string data) 
+        {
+            // calculate hash
+            var hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(data));
+            // get int
+            var ivalue = BitConverter.ToInt32(hashed, 0);
+            // add int
+            newHashId += ivalue;
+            return newHashId;
+        } 
 
         /// <summary>
         /// This function only save to file new provided request.
@@ -186,7 +118,7 @@ namespace ChristmasTreeDeliveryApp3
         /// <param name="type">Tree type.</param>
         /// <param name="to">Getter</param>
         /// <returns></returns>
-        public Tuple<bool, TreeObjectDtoData?> SaveTree(String name, PresentsType type, string to)
+        public Tuple<bool, TreeObjectDtoData?> SaveTree(string name, PresentsType type, string to)
         {
             // Get hash id of provided tree
             // create new object
@@ -194,21 +126,11 @@ namespace ChristmasTreeDeliveryApp3
             // create new variable
             var newHashId = 0;
 
-            // calculate hash
-            var hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(name));
-            // get int
-            var ivalue = BitConverter.ToInt32(hashed, 0);
-            // add int
-            newHashId += ivalue;
+            SecondName(md5Hasher, newHashId, name);
 
-            // calculate hash
-            hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(to));
-            // get int
-            ivalue = BitConverter.ToInt32(hashed, 0);
-            // add int
-            newHashId += ivalue;
+            SecondName(md5Hasher, newHashId, to);
 
-            StreamReader file = null;
+            StreamReader? file = null;
 
             try
             {
@@ -220,10 +142,10 @@ namespace ChristmasTreeDeliveryApp3
                 {
                     var data = ln.Split(";");
                     var oldHashId = 0;
-
+                    var newValue = SecondName(md5Hasher, oldHashId, data[0]);
                     hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(data[0]));
                     ivalue = BitConverter.ToInt32(hashed, 0);
-                    oldHashId += ivalue;
+                    oldHashId += newValue;
 
                     hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(data[2]));
                     ivalue = BitConverter.ToInt32(hashed, 0);
