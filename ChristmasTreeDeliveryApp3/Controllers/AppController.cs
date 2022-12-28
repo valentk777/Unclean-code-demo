@@ -25,10 +25,7 @@ namespace ChristmasTreeDeliveryApp3.Controllers
         {
             var trees = new List<TreeObjectDtoData>();
 
-            foreach (var type in new List<PresentsType>()
-            {
-                PresentsType.RedcedarTree, PresentsType.CedarTree, PresentsType.ConiferTree, PresentsType.CypressTree, PresentsType.FirTree
-            })
+            foreach (var type in new List<PresentsType>())
             {
                 var db = new Database();
 
@@ -38,13 +35,8 @@ namespace ChristmasTreeDeliveryApp3.Controllers
                     {
                         trees.Add(result);
                     }
-                    else
-                    {
-                        continue;
-                    }
                 }
             }
-
             return Ok(trees);
         }
 
@@ -59,10 +51,7 @@ namespace ChristmasTreeDeliveryApp3.Controllers
         {
             var trees = new List<TreeObjectDtoData>();
 
-            foreach (var new_type in new List<PresentsType>()
-            {
-                PresentsType.RedcedarTree, PresentsType.CedarTree, PresentsType.ConiferTree, PresentsType.CypressTree, PresentsType.FirTree
-            })
+            foreach (var new_type in new List<PresentsType>())
             {
                 var db = new Database();
 
