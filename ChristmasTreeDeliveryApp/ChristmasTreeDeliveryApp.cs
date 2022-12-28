@@ -13,15 +13,16 @@
         {
             try
             {
-                while (true)
-                {
+                //while (true)
+                //{
                     Console.WriteLine("Select option you want:" +
                         "\n[1] deliver a tree" +
                         "\n[0] close program");
 
-                    string o = Console.ReadLine();
+                    string userInput = Console.ReadLine(); // o is not quite understandable what is representing for me, so I changed it
 
-                    if (o == "1")
+                //There is something what repeats, need to re-check - now it's like that, but maybe I'll chnage it after
+                    if (userInput == "1")
                     {
                         try
                         {
@@ -36,18 +37,19 @@
                             {
                                 StreamWriter file = new("error_file.txt", append: false);
                                 file.WriteLine(ex);
-                                continue;
+                                //continue;
                                 file.Close();
                             }
                         }
-                    }
-                    else if (o == "0")
-                    {
-                        Console.WriteLine("selected 0");
-                        break;
-                    }
-                }
+                    } 
+                    //else if (userInput == "0")
+                    //{
+                        //Console.WriteLine("selected 0");
+                        //break;
+                    //}
+                //}
             }
+            // why this is needed.... ? re-check
             catch
             {
                 // Alex: 2007-05-17.
