@@ -22,13 +22,17 @@ namespace ChristmasTreeDeliveryApp3.Controllers
 
         [HttpGet]
         [Route("GetAllTrees")]
-        public ActionResult<List<TreeObjectDtoData>> Get1()
+        public ActionResult<List<TreeObjectDtoData>> Get1()//name is bad
         {
             var trees = new List<TreeObjectDtoData>();
 
             foreach (var type in new List<PresentsType>()
             {
-                PresentsType.RedcedarTree, PresentsType.CedarTree, PresentsType.ConiferTree, PresentsType.CypressTree, PresentsType.FirTree
+                PresentsType.RedcedarTree, 
+                PresentsType.CedarTree, 
+                PresentsType.ConiferTree,
+                PresentsType.CypressTree, 
+                PresentsType.FirTree
             })
             {
                 var db = new Database();
@@ -39,30 +43,30 @@ namespace ChristmasTreeDeliveryApp3.Controllers
                     {
                         trees.Add(result);
                     }
-                    else
-                    {
-                        continue;
-                    }
                 }
             }
 
             return Ok(trees);
         }
 
-        public class Get2Request
+        public class Get2Request //bad name
         {
             public int type { get; set; }
         }
 
         [HttpGet]
         [Route("GetAllTreesByType")]
-        public ActionResult<List<TreeObjectDtoData>> Get2([FromQuery] Get2Request request)
+        public ActionResult<List<TreeObjectDtoData>> Get2([FromQuery] Get2Request request) // bad name
         {
             var trees = new List<TreeObjectDtoData>();
 
             foreach (var new_type in new List<PresentsType>()
             {
-                PresentsType.RedcedarTree, PresentsType.CedarTree, PresentsType.ConiferTree, PresentsType.CypressTree, PresentsType.FirTree
+                PresentsType.RedcedarTree,
+                PresentsType.CedarTree,
+                PresentsType.ConiferTree,
+                PresentsType.CypressTree,
+                PresentsType.FirTree
             })
             {
                 var db = new Database();
@@ -80,10 +84,6 @@ namespace ChristmasTreeDeliveryApp3.Controllers
                             _logger.LogError("nothing to log");
                             continue;
                         }
-                    }
-                    else
-                    {
-                        continue;
                     }
                 }
             }
