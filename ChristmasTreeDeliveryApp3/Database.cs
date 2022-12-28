@@ -142,10 +142,10 @@ namespace ChristmasTreeDeliveryApp3
                 {
                     var data = ln.Split(";");
                     var oldHashId = 0;
-                    var newValue = SecondName(md5Hasher, oldHashId, data[0]);
+
                     hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(data[0]));
                     ivalue = BitConverter.ToInt32(hashed, 0);
-                    oldHashId += newValue;
+                    oldHashId += ivalue;
 
                     hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(data[2]));
                     ivalue = BitConverter.ToInt32(hashed, 0);
