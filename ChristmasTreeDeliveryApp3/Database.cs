@@ -100,15 +100,15 @@ namespace ChristmasTreeDeliveryApp3
         }
 
 
-        private int SecondName(MD5 md5Hasher, int newHashId, string data) 
+        private int SecondName(MD5 md5Hasher, int HashId, string data) 
         {
             // calculate hash
             var hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(data));
             // get int
             var ivalue = BitConverter.ToInt32(hashed, 0);
             // add int
-            newHashId += ivalue;
-            return newHashId;
+            HashId += ivalue;
+            return HashId;
         } 
 
         /// <summary>
@@ -126,9 +126,9 @@ namespace ChristmasTreeDeliveryApp3
             // create new variable
             var newHashId = 0;
 
-            SecondName(md5Hasher, newHashId, name);
+            newHashId = SecondName(md5Hasher, newHashId, name);
 
-            SecondName(md5Hasher, newHashId, to);
+            newHashId = SecondName(md5Hasher, newHashId, to);
 
             StreamReader? file = null;
 
@@ -137,26 +137,18 @@ namespace ChristmasTreeDeliveryApp3
                 // read file and check if we not save same record before
                 file = new("treeRecord.txt");
 
-                string ln = file.ReadLine();
-                while (ln != null)
+                string ln = string.Empty;
+                while (file.ReadLine() != null)
                 {
+                    ln = file.ReadLine();
                     var data = ln.Split(";");
                     var oldHashId = 0;
 
-                    hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(data[0]));
-                    ivalue = BitConverter.ToInt32(hashed, 0);
-                    oldHashId += ivalue;
+                    oldHashId = SecondName(md5Hasher, oldHashId, data[0]);
 
-                    hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(data[2]));
-                    ivalue = BitConverter.ToInt32(hashed, 0);
-                    oldHashId += ivalue;
+                    oldHashId = SecondName(md5Hasher, oldHashId, data[2]);
 
-                    if (oldHashId != newHashId)
-                    {
-                        ln = file.ReadLine();
-                        continue;
-                    }
-                    else
+                    if (oldHashId == newHashId)
                     {
                         return new Tuple<bool, TreeObjectDtoData?>(true, null);
                     }
