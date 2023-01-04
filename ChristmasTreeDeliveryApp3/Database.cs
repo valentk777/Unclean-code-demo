@@ -1,23 +1,10 @@
-﻿using System.Diagnostics.Metrics;
-using System.IO;
-using System.IO;
-using System.IO;
-using System.IO;
-using System.IO;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using ChristmasTreeDeliveryApp3.Controllers;
 
 namespace ChristmasTreeDeliveryApp3
 {
     public class Database
     {
-        public Database()
-        {
-
-        }
-
         /// <summary>
         /// RETURN ALL trees by type.
         /// </summary>
@@ -158,21 +145,14 @@ namespace ChristmasTreeDeliveryApp3
                         }
                         break;
                     default:
-                        // this line throw exception;
                         throw new EntryPointNotFoundException();
-                        break;
                 }
-            }
-            catch
-            {
-                // no need, just to have finally block
             }
             finally
             {
                 if (file != null)
                 {
                     file.Close();
-                    file = null;
                 }
             }
 
@@ -186,7 +166,7 @@ namespace ChristmasTreeDeliveryApp3
         /// <param name="type">Tree type.</param>
         /// <param name="to">Getter</param>
         /// <returns></returns>
-        public Tuple<bool, TreeObjectDtoData?> SaveTree(String name, PresentsType type, string to)
+        public Tuple<bool, TreeObjectDtoData?> SaveTree(string name, PresentsType type, string to)
         {
             // Get hash id of provided tree
             // create new object
@@ -240,21 +220,12 @@ namespace ChristmasTreeDeliveryApp3
                     }
                 }
             }
-            catch
-            {
-                // do nothing
-            }
             finally
             {
-                if (file == null)
-                {
-                    // do nothing
-                }
-                else
+                if (file != null)
                 {
                     file.Close();
                 }
-
             }
 
             // note: we allow to buy only one tree with same tree name for same requestor.
@@ -300,10 +271,10 @@ namespace ChristmasTreeDeliveryApp3
                 writter.WriteLine(sss);
                 writter.Close();
 
-                return new Tuple<bool, TreeObjectDtoData?>(false, saveThis );
+                return new Tuple<bool, TreeObjectDtoData?>(false, saveThis);
             }
 
-            return new Tuple<bool, TreeObjectDtoData?>(true, saveThis );
+            return new Tuple<bool, TreeObjectDtoData?>(true, saveThis);
         }
     }
 
