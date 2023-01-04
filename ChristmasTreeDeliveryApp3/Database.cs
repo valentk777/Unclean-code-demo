@@ -18,7 +18,7 @@ namespace ChristmasTreeDeliveryApp3
 
         }
 
-        private void Name(StreamReader? file, PresentsType type, List<TreeObjectDtoData> trees)
+        private void Name(StreamReader? file, PresentsType type, List<TreeObjectDtoData> trees) // didn't decide what name should be
         {
             if (File.Exists("treeRecord.txt"))
             {
@@ -79,14 +79,10 @@ namespace ChristmasTreeDeliveryApp3
 
                         break;
                     default:
-                        // this line throw exception;
                         throw new EntryPointNotFoundException();
                 }
             }
-            catch
-            {
-                // no need, just to have finally block
-            }
+
             finally
             {
                 if (file != null)
@@ -99,8 +95,14 @@ namespace ChristmasTreeDeliveryApp3
             return trees;
         }
 
-
-        private int SecondName(MD5 md5Hasher, int HashId, string data) 
+        /// <summary>
+        /// missing sumary
+        /// </summary>
+        /// <param name="md5Hasher"></param>
+        /// <param name="HashId"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private int SecondName(MD5 md5Hasher, int HashId, string data) // didn't decide what name should be
         {
             // calculate hash
             var hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(data));
@@ -108,6 +110,7 @@ namespace ChristmasTreeDeliveryApp3
             var ivalue = BitConverter.ToInt32(hashed, 0);
             // add int
             HashId += ivalue;
+            
             return HashId;
         } 
 
@@ -154,21 +157,13 @@ namespace ChristmasTreeDeliveryApp3
                     }
                 }
             }
-            catch
-            {
-                // do nothing
-            }
+
             finally
             {
-                if (file == null)
-                {
-                    // do nothing
-                }
-                else
+                if (file != null)
                 {
                     file.Close();
                 }
-
             }
 
             // note: we allow to buy only one tree with same tree name for same requestor.
@@ -181,7 +176,7 @@ namespace ChristmasTreeDeliveryApp3
                 TreeDeliveredDate = DateTime.UtcNow
             };
 
-            string sss = "";
+            string sss = ""; // bad variable name
 
             // Add text
             sss += saveThis.TreeName;
