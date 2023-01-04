@@ -1,11 +1,4 @@
-using System.ComponentModel;
-using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics.Metrics;
-using System.IO;
-using System.Security.Cryptography;
-using System.Text;
-using ChristmasTreeDeliveryApp3.Controllers;
 
 namespace ChristmasTreeDeliveryApp3.Controllers
 {
@@ -25,8 +18,11 @@ namespace ChristmasTreeDeliveryApp3.Controllers
         {
             var trees = new List<TreeObjectDtoData>();
 
-            foreach (var type in new List<PresentsType>())
+            foreach (var type in new List<PresentsType>()
             {
+                PresentsType.RedcedarTree, PresentsType.CedarTree, PresentsType.ConiferTree, PresentsType.CypressTree, PresentsType.FirTree
+            })
+            { 
                 var db = new Database();
 
                 foreach (var result in db.AllTrees(type))
@@ -51,8 +47,11 @@ namespace ChristmasTreeDeliveryApp3.Controllers
         {
             var trees = new List<TreeObjectDtoData>();
 
-            foreach (var new_type in new List<PresentsType>())
+            foreach (var new_type in new List<PresentsType>()
             {
+                PresentsType.RedcedarTree, PresentsType.CedarTree, PresentsType.ConiferTree, PresentsType.CypressTree, PresentsType.FirTree
+            })
+            { 
                 var db = new Database();
 
                 foreach (var result in db.AllTrees(new_type))
@@ -69,10 +68,6 @@ namespace ChristmasTreeDeliveryApp3.Controllers
                             continue;
                         }
                     }
-                    else
-                    {
-                        continue;
-                    }
                 }
             }
 
@@ -81,20 +76,17 @@ namespace ChristmasTreeDeliveryApp3.Controllers
         
         [Route("AddOrderOfTree")]
         [HttpPost]
-        public async Task<ActionResult> Add1([Microsoft.AspNetCore.Mvc.FromBody] TreeObjectDtoData data)
+        public async Task<ActionResult> Add1([FromBody] TreeObjectDtoData data)
         {
             var db = new Database();
             var result = db.SaveTree(data.TreeName, data.TreeType, data.TreeDeliveredTo);
 
-            if (result.Item1 == true)
+            if (result.Item1)
             {
                 return Ok();
             }
-            else
-            {
-                throw new EntryPointNotFoundException("results is not okay");
-                return Conflict();
-            }
+
+            return Conflict(new EntryPointNotFoundException("results is not okay"));
         }
     }
 

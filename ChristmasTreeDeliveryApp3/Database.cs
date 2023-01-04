@@ -1,11 +1,4 @@
-﻿using System.Diagnostics.Metrics;
-using System.IO;
-using System.IO;
-using System.IO;
-using System.IO;
-using System.IO;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 using ChristmasTreeDeliveryApp3.Controllers;
 
@@ -13,11 +6,6 @@ namespace ChristmasTreeDeliveryApp3
 {
     public class Database
     {
-        public Database()
-        {
-
-        }
-
         /// <summary>
         /// RETURN ALL trees by type.
         /// </summary>
@@ -158,21 +146,14 @@ namespace ChristmasTreeDeliveryApp3
                         }
                         break;
                     default:
-                        // this line throw exception;
                         throw new EntryPointNotFoundException();
-                        break;
                 }
-            }
-            catch
-            {
-                // no need, just to have finally block
             }
             finally
             {
                 if (file != null)
                 {
                     file.Close();
-                    file = null;
                 }
             }
 
@@ -248,13 +229,9 @@ namespace ChristmasTreeDeliveryApp3
             {
                 if (file == null)
                 {
-                    // do nothing
-                }
-                else
-                {
+
                     file.Close();
                 }
-
             }
 
             // note: we allow to buy only one tree with same tree name for same requestor.
