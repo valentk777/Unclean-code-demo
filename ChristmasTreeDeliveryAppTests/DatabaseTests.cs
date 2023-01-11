@@ -1,5 +1,5 @@
 using ChristmasTreeDeliveryApp3;
-using Microsoft.AspNetCore.Authorization;
+using ChristmasTreeDeliveryApp3.Enums;
 
 namespace ChristmasTreeDeliveryAppTests
 {

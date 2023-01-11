@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using ChristmasTreeDeliveryApp3.DtoData;
-using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Mvc;
+using ChristmasTreeDeliveryApp3.Enums;
 
 namespace ChristmasTreeDeliveryApp3.Controllers
 {
@@ -16,18 +16,11 @@ namespace ChristmasTreeDeliveryApp3.Controllers
 
         [HttpGet]
         [Route("GetAllTrees")]
-        public ActionResult<List<TreeObjectDtoData>> Get1()//name is bad
+        public ActionResult<List<TreeObjectDtoData>> Get1()
         {
             var trees = new List<TreeObjectDtoData>();
 
-            foreach (var type in new List<PresentsType>()
-            {
-                PresentsType.RedcedarTree, 
-                PresentsType.CedarTree, 
-                PresentsType.ConiferTree,
-                PresentsType.CypressTree, 
-                PresentsType.FirTree
-            })
+            foreach (PresentsType type in Enum.GetValues(typeof(PresentsType)))
             {
                 var db = new Database();
 
@@ -43,25 +36,18 @@ namespace ChristmasTreeDeliveryApp3.Controllers
             return Ok(trees);
         }
 
-        public class Get2Request //bad name
+        public class Get2Request
         {
             public int type { get; set; }
         }
 
         [HttpGet]
         [Route("GetAllTreesByType")]
-        public ActionResult<List<TreeObjectDtoData>> Get2([FromQuery] Get2Request request) // bad name
+        public ActionResult<List<TreeObjectDtoData>> Get2([FromQuery] Get2Request request)
         {
             var trees = new List<TreeObjectDtoData>();
 
-            foreach (var new_type in new List<PresentsType>()
-            {
-                PresentsType.RedcedarTree,
-                PresentsType.CedarTree,
-                PresentsType.ConiferTree,
-                PresentsType.CypressTree,
-                PresentsType.FirTree
-            })
+            foreach (PresentsType new_type in Enum.GetValues(typeof(PresentsType)))
             {
                 var db = new Database();
 
@@ -76,7 +62,6 @@ namespace ChristmasTreeDeliveryApp3.Controllers
                         else
                         {
                             _logger.LogError("nothing to log");
-                            continue;
                         }
                     }
                 }
@@ -85,43 +70,19 @@ namespace ChristmasTreeDeliveryApp3.Controllers
             return Ok(trees);
         }
 
-        // not finished yet
-        private TreeObjectDtoData MethodName(List<TreeObjectDtoData> trees) 
-        {
-            foreach (var type in new List<PresentsType>()
-            {
-                PresentsType.RedcedarTree,
-                PresentsType.CedarTree,
-                PresentsType.ConiferTree,
-                PresentsType.CypressTree,
-                PresentsType.FirTree
-            })
-            {
-                var db = new Database();
-
-                foreach (var result in db.AllTrees(type))
-                {
-                    if (result != null)
-                    {
-                        trees.Add(result);
-                    }
-                }
-            }
-        }
         [Route("AddOrderOfTree")]
         [HttpPost]
-        public async Task<ActionResult> Add1([Microsoft.AspNetCore.Mvc.FromBody] TreeObjectDtoData data) // bad name
+        public async Task<ActionResult> Add1([FromBody] TreeObjectDtoData data)
         {
             var db = new Database();
             var result = db.SaveTree(data.TreeName, data.TreeType, data.TreeDeliveredTo);
 
-            if (result.Item1 != true)
+            if (result.Item1)
             {
-                return Conflict( new EntryPointNotFoundException("results is not okay"));
+                return Ok();
             }
 
-            return Ok();
+            return Conflict(new EntryPointNotFoundException("results is not okay"));
         }
     }
 }
-

@@ -1,4 +1,5 @@
-﻿namespace ChristmasTreeDeliveryApp3.DtoData
+﻿using ChristmasTreeDeliveryApp3.Enums;
+namespace ChristmasTreeDeliveryApp3.DtoData
 {
     public class TreeObjectDtoData
     {

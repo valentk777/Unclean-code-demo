@@ -1,11 +1,7 @@
-﻿using System.Diagnostics.Metrics;
-using System.IO;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Xml.Linq;
-using ChristmasTreeDeliveryApp3.Controllers;
 using ChristmasTreeDeliveryApp3.DtoData;
+using ChristmasTreeDeliveryApp3.Enums;
 using static System.Net.WebRequestMethods;
 using File = System.IO.File;
 
@@ -13,10 +9,6 @@ namespace ChristmasTreeDeliveryApp3
 {
     public class Database
     {
-        public Database()
-        {
-
-        }
 
         private void Name(StreamReader? file, PresentsType type, List<TreeObjectDtoData> trees) // didn't decide what name should be
         {
@@ -88,7 +80,6 @@ namespace ChristmasTreeDeliveryApp3
                 if (file != null)
                 {
                     file.Close();
-                    //file = null;
                 }
             }
 
@@ -214,14 +205,5 @@ namespace ChristmasTreeDeliveryApp3
 
             return new Tuple<bool, TreeObjectDtoData?>(true, saveThis );
         }
-    }
-
-    public enum PresentsType
-    {
-        RedcedarTree = 0,
-        CedarTree = 1,
-        ConiferTree = 2,
-        CypressTree = 3,
-        FirTree = 4,
     }
 }
