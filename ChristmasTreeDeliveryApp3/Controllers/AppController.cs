@@ -14,14 +14,11 @@ namespace ChristmasTreeDeliveryApp3.Controllers
 
         [HttpGet]
         [Route("GetAllTrees")]
-        public ActionResult<List<TreeObjectDtoData>> Get1()
+        public ActionResult<List<TreeObjectDtoData>> GetAllTrees()
         {
             var trees = new List<TreeObjectDtoData>();
 
-            foreach (var type in new List<PresentsType>()
-            {
-                PresentsType.RedcedarTree, PresentsType.CedarTree, PresentsType.ConiferTree, PresentsType.CypressTree, PresentsType.FirTree
-            })
+            foreach (PresentsType type in Enum.GetValues(typeof(PresentsType)))
             { 
                 var db = new Database();
 
@@ -36,21 +33,18 @@ namespace ChristmasTreeDeliveryApp3.Controllers
             return Ok(trees);
         }
 
-        public class Get2Request
+        public class GetAllTreesByTypeRequest
         {
             public int type { get; set; }
         }
 
         [HttpGet]
-        [Route("GetAllTreesByType")]
-        public ActionResult<List<TreeObjectDtoData>> Get2([FromQuery] Get2Request request)
+        [Route("GetAllTreesByTreeType")]
+        public ActionResult<List<TreeObjectDtoData>> GetAllTreesByType([FromQuery] GetAllTreesByTypeRequest request)
         {
             var trees = new List<TreeObjectDtoData>();
 
-            foreach (var new_type in new List<PresentsType>()
-            {
-                PresentsType.RedcedarTree, PresentsType.CedarTree, PresentsType.ConiferTree, PresentsType.CypressTree, PresentsType.FirTree
-            })
+            foreach (PresentsType new_type in Enum.GetValues(typeof(PresentsType)))
             { 
                 var db = new Database();
 
@@ -65,7 +59,6 @@ namespace ChristmasTreeDeliveryApp3.Controllers
                         else
                         {
                             _logger.LogError("nothing to log");
-                            continue;
                         }
                     }
                 }
