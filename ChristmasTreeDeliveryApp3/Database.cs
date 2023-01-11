@@ -12,7 +12,7 @@ namespace ChristmasTreeDeliveryApp3
         /// <exception cref="EntryPointNotFoundException"></exception>
         public List<TreeObjectDtoData> AllTrees(PresentsType type)
         {
-            StreamReader file = null;
+            StreamReader file = null; // a file
             var trees = new List<TreeObjectDtoData>();
 
             try
