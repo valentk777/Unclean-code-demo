@@ -13,7 +13,7 @@ namespace ChristmasTreeDeliveryAppTests
             // Assert
 
             // Act
-            var result = db.AllTrees(PresentsType.RedcedarTree);
+            var result = db.GetAllTrees(PresentsType.RedcedarTree);
 
             Assert.True(result.Count == 0);
 
@@ -27,7 +27,7 @@ namespace ChristmasTreeDeliveryAppTests
             File.Delete("treeRecord.txt");
 
             // Act
-            var result = db.AllTrees(PresentsType.CedarTree);
+            var result = db.GetAllTrees(PresentsType.CedarTree);
 
             // Assert
             Assert.True(result.Count == 0);
@@ -40,7 +40,7 @@ namespace ChristmasTreeDeliveryAppTests
             var db = new Database();
             File.Delete("treeRecord.txt");
 
-            var result = db.AllTrees(PresentsType.ConiferTree);
+            var result = db.GetAllTrees(PresentsType.ConiferTree);
             Assert.True(result.Count == 0);
 
         }
@@ -53,7 +53,7 @@ namespace ChristmasTreeDeliveryAppTests
             File.Delete("treeRecord.txt");
 
             // Act
-            var result = db.AllTrees(PresentsType.CypressTree);
+            var result = db.GetAllTrees(PresentsType.CypressTree);
 
             // Assert
             Assert.True(result.Count == 0);
@@ -70,7 +70,7 @@ namespace ChristmasTreeDeliveryAppTests
             var db = new Database();
             File.Delete("treeRecord.txt");
 
-            var result = db.AllTrees(PresentsType.FirTree);
+            var result = db.GetAllTrees(PresentsType.FirTree);
 
             Assert.True(result.Count == 0);
 

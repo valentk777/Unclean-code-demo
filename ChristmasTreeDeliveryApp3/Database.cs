@@ -3,16 +3,29 @@ using System.Text;
 
 namespace ChristmasTreeDeliveryApp3
 {
-    public class Database
+    public class ResultAfterSave
+    {
+        public bool IsSaveWasSucessful { get; set; }
+
+        public TreeObjectDtoData? Data { get; set; }
+
+        public ResultAfterSave(bool isSaveWasSucessful, TreeObjectDtoData? data) 
+        {
+            IsSaveWasSucessful = isSaveWasSucessful;
+            Data = data;
+        }
+    }
+
+    public class Database : IDatabase
     {
         /// <summary>
         /// RETURN ALL trees by type.
         /// </summary>
         /// <param name="type">type.</param>
         /// <exception cref="EntryPointNotFoundException"></exception>
-        public List<TreeObjectDtoData> AllTrees(PresentsType type)
+        public List<TreeObjectDtoData> GetAllTrees(PresentsType type)
         {
-            StreamReader file = null; // a file
+            StreamReader file = null;
             var trees = new List<TreeObjectDtoData>();
 
             try
@@ -166,7 +179,7 @@ namespace ChristmasTreeDeliveryApp3
         /// <param name="type">Tree type.</param>
         /// <param name="to">Getter</param>
         /// <returns></returns>
-        public Tuple<bool, TreeObjectDtoData?> SaveTree(string name, PresentsType type, string to)
+        public ResultAfterSave SaveTree(string name, PresentsType type, string to)
         {
             // Get hash id of provided tree
             // create new object
@@ -216,7 +229,7 @@ namespace ChristmasTreeDeliveryApp3
                     }
                     else
                     {
-                        return new Tuple<bool, TreeObjectDtoData?>(true, null);
+                        return new ResultAfterSave(true, null);
                     }
                 }
             }
@@ -271,10 +284,10 @@ namespace ChristmasTreeDeliveryApp3
                 writter.WriteLine(sss);
                 writter.Close();
 
-                return new Tuple<bool, TreeObjectDtoData?>(false, saveThis);
+                return new ResultAfterSave(false, saveThis);
             }
 
-            return new Tuple<bool, TreeObjectDtoData?>(true, saveThis);
+            return new ResultAfterSave(true, saveThis);
         }
     }
 

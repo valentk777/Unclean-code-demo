@@ -7,10 +7,12 @@ namespace ChristmasTreeDeliveryApp3.Controllers
     public class AppController : ControllerBase
     {
         private readonly ILogger<AppController> _logger;
+        private readonly IDatabase _database;
 
-        public AppController(ILogger<AppController> logger)
+        public AppController(ILogger<AppController> logger, IDatabase database)
         {
             _logger = logger;
+            _database = database;
         }
 
         [HttpGet]
@@ -21,15 +23,7 @@ namespace ChristmasTreeDeliveryApp3.Controllers
 
             foreach (PresentsType type in Enum.GetValues(typeof(PresentsType)))
             {
-                var db = new Database();
-
-                foreach (var result in db.AllTrees(type))
-                {
-                    if (result != null)
-                    {
-                        trees.Add(result);
-                    }
-                }
+                trees.AddRange(_database.GetAllTrees(type));
             }
 
             return Ok(trees);
@@ -39,37 +33,16 @@ namespace ChristmasTreeDeliveryApp3.Controllers
         [Route("GetAllTreesByType")]
         public ActionResult<List<TreeObjectDtoData>> GetAllTreesByType([FromQuery] GetAllTreesByTreeTypeRequest request)
         {
-            var trees = new List<TreeObjectDtoData>();
-
-            foreach (PresentsType new_type in Enum.GetValues(typeof(PresentsType)))
-            {
-                var db = new Database();
-
-                foreach (var result in db.AllTrees(new_type))
-                {
-                    if (result != null)
-                    {
-                        if ((int)result.TreeType == request.Type)
-                        {
-                            trees.Add(result);
-                        }
-                        else
-                        {
-                            _logger.LogError("nothing to log");
-                        }
-                    }
-                }
-            }
-
+            var trees = _database.GetAllTrees((PresentsType)request.Type);
+            
             return Ok(trees);
         }
-        
-        [Route("AddOrderOfTree")]
+
         [HttpPost]
+        [Route("AddOrderOfTree")]
         public async Task<ActionResult> AddOrderOfTree([FromBody] TreeObjectDtoData data)
         {
-            var db = new Database();
-            var result = db.SaveTree(data.TreeName, data.TreeType, data.TreeDeliveredTo);
+            var result = _database.SaveTree(data.TreeName, data.TreeType, data.TreeDeliveredTo);
 
             if (result.Item1)
             {
