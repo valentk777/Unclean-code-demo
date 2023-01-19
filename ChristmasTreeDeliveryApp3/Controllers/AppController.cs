@@ -17,9 +17,9 @@ namespace ChristmasTreeDeliveryApp3.Controllers
 
         [HttpGet]
         [Route("GetAllTrees")]
-        public ActionResult<List<TreeObjectDtoData>> GetAllTrees()
+        public ActionResult<List<OrderedTree>> GetAllTrees()
         {
-            var trees = new List<TreeObjectDtoData>();
+            var trees = new List<OrderedTree>();
 
             foreach (PresentsType type in Enum.GetValues(typeof(PresentsType)))
             {
@@ -31,20 +31,21 @@ namespace ChristmasTreeDeliveryApp3.Controllers
 
         [HttpGet]
         [Route("GetAllTreesByType")]
-        public ActionResult<List<TreeObjectDtoData>> GetAllTreesByType([FromQuery] GetAllTreesByTreeTypeRequest request)
+        public ActionResult<List<OrderedTree>> GetAllTreesByType([FromQuery] GetAllTreesByTreeTypeRequest request)
         {
+            // TODO: throw exception if type does not exist
             var trees = _database.GetAllTrees((PresentsType)request.Type);
-            
+
             return Ok(trees);
         }
 
         [HttpPost]
         [Route("AddOrderOfTree")]
-        public async Task<ActionResult> AddOrderOfTree([FromBody] TreeObjectDtoData data)
+        public async Task<ActionResult> AddOrderOfTree([FromBody] OrderedTree data)
         {
-            var result = _database.SaveTree(data.TreeName, data.TreeType, data.TreeDeliveredTo);
+            var result = _database.SaveTree(data.Name, data.Type, data.DeliveryAddress);
 
-            if (result.Item1)
+            if (result.IsSaveWasSucessful)
             {
                 return Ok();
             }
@@ -53,4 +54,3 @@ namespace ChristmasTreeDeliveryApp3.Controllers
         }
     }
 }
-

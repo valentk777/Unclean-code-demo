@@ -7,9 +7,9 @@ namespace ChristmasTreeDeliveryApp3
     {
         public bool IsSaveWasSucessful { get; set; }
 
-        public TreeObjectDtoData? Data { get; set; }
+        public OrderedTree? Data { get; set; }
 
-        public ResultAfterSave(bool isSaveWasSucessful, TreeObjectDtoData? data) 
+        public ResultAfterSave(bool isSaveWasSucessful, OrderedTree? data)
         {
             IsSaveWasSucessful = isSaveWasSucessful;
             Data = data;
@@ -23,149 +23,52 @@ namespace ChristmasTreeDeliveryApp3
         /// </summary>
         /// <param name="type">type.</param>
         /// <exception cref="EntryPointNotFoundException"></exception>
-        public List<TreeObjectDtoData> GetAllTrees(PresentsType type)
+        public List<OrderedTree> GetAllTrees(PresentsType type)
         {
-            StreamReader file = null;
-            var trees = new List<TreeObjectDtoData>();
-
-            try
+            // SOLID. Open-close principle issue :(. Make an instances of the class
+            switch (type)
             {
-                switch (type)
-                {
-                    case PresentsType.RedcedarTree:
-                        if (File.Exists("treeRecord.txt"))
-                        {
-                            file = new("treeRecord.txt");
-                            string ln = file.ReadLine();
-                            while (ln != null)
-                            {
-                                var data = ln.Split(";");
-
-                                if (data[1] == PresentsType.RedcedarTree.ToString())
-                                {
-                                    trees.Add(new TreeObjectDtoData
-                                    {
-                                        TreeName = data[0],
-                                        TreeType = PresentsType.RedcedarTree,
-                                        TreeDeliveredTo = data[2],
-                                        TreeDeliveredDate = DateTime.ParseExact(data[3], "yyyy-MM-dd HH:mm:ss,fff",
-                                           System.Globalization.CultureInfo.InvariantCulture)
-                                    });
-                                }
-
-                                ln = file.ReadLine();
-                            }
-                        }
-                        break;
-                    case PresentsType.CedarTree:
-                        if (File.Exists("treeRecord.txt"))
-                        {
-                            file = new("treeRecord.txt");
-                            string ln = file.ReadLine();
-                            while (ln != null)
-                            {
-                                var data = ln.Split(";");
-
-                                if (data[1] == PresentsType.CedarTree.ToString())
-                                {
-                                    trees.Add(new TreeObjectDtoData
-                                    {
-                                        TreeName = data[0],
-                                        TreeType = PresentsType.CedarTree,
-                                        TreeDeliveredTo = data[2],
-                                        TreeDeliveredDate = DateTime.ParseExact(data[3], "yyyy-MM-dd HH:mm:ss,fff",
-                                           System.Globalization.CultureInfo.InvariantCulture)
-                                    });
-                                }
-
-                                ln = file.ReadLine();
-                            }
-                        }
-                        break;
-                    case PresentsType.ConiferTree:
-                        if (File.Exists("treeRecord.txt"))
-                        {
-                            file = new("treeRecord.txt");
-                            string ln = file.ReadLine();
-                            while (ln != null)
-                            {
-                                var data = ln.Split(";");
-
-                                if (data[1] == PresentsType.ConiferTree.ToString())
-                                {
-                                    trees.Add(new TreeObjectDtoData
-                                    {
-                                        TreeName = data[0],
-                                        TreeType = PresentsType.ConiferTree,
-                                        TreeDeliveredTo = data[2],
-                                        TreeDeliveredDate = DateTime.ParseExact(data[3], "yyyy-MM-dd HH:mm:ss,fff",
-                                           System.Globalization.CultureInfo.InvariantCulture)
-                                    });
-                                }
-
-                                ln = file.ReadLine();
-                            }
-                        }
-                        break;
-                    case PresentsType.CypressTree:
-                        if (File.Exists("treeRecord.txt"))
-                        {
-                            file = new("treeRecord.txt");
-                            string ln = file.ReadLine();
-                            while (ln != null)
-                            {
-                                var data = ln.Split(";");
-
-                                if (data[1] == PresentsType.CypressTree.ToString())
-                                {
-                                    trees.Add(new TreeObjectDtoData
-                                    {
-                                        TreeName = data[0],
-                                        TreeType = PresentsType.CypressTree,
-                                        TreeDeliveredTo = data[2],
-                                        TreeDeliveredDate = DateTime.ParseExact(data[3], "yyyy-MM-dd HH:mm:ss,fff",
-                                           System.Globalization.CultureInfo.InvariantCulture)
-                                    });
-                                }
-
-                                ln = file.ReadLine();
-                            }
-                        }
-                        break;
-                    case PresentsType.FirTree:
-                        if (File.Exists("treeRecord.txt"))
-                        {
-                            file = new("treeRecord.txt");
-                            string ln = file.ReadLine();
-                            while (ln != null)
-                            {
-                                var data = ln.Split(";");
-
-                                if (data[1] == PresentsType.FirTree.ToString())
-                                {
-                                    trees.Add(new TreeObjectDtoData
-                                    {
-                                        TreeName = data[0],
-                                        TreeType = PresentsType.FirTree,
-                                        TreeDeliveredTo = data[2],
-                                        TreeDeliveredDate = DateTime.ParseExact(data[3], "yyyy-MM-dd HH:mm:ss,fff",
-                                           System.Globalization.CultureInfo.InvariantCulture)
-                                    });
-                                }
-
-                                ln = file.ReadLine();
-                            }
-                        }
-                        break;
-                    default:
-                        throw new EntryPointNotFoundException();
-                }
+                case PresentsType.RedcedarTree:
+                case PresentsType.CedarTree:
+                case PresentsType.ConiferTree:
+                case PresentsType.CypressTree:
+                case PresentsType.FirTree:
+                    return GetOrdersByType(type);
+                default:
+                    throw new EntryPointNotFoundException();
             }
-            finally
+        }
+
+        private static List<OrderedTree> GetOrdersByType(PresentsType presentType)
+        {
+            // check if file exist
+            // open file
+            // filter only orders by tree type
+            // returns all orders from file (DB)
+
+            var trees = new List<OrderedTree>();
+
+            if (!File.Exists("treeRecord.txt"))
             {
-                if (file != null)
+                return trees;
+            }
+
+            var lines = File.ReadAllLines("treeRecord.txt");
+
+            foreach(var line in lines)
+            {
+                var data = line.Split(";");
+
+                if (data[1] == presentType.ToString())
                 {
-                    file.Close();
+                    trees.Add(new OrderedTree
+                    {
+                        Name = data[0],
+                        Type = PresentsType.ConiferTree,
+                        DeliveryAddress = data[2],
+                        DeliveryDate = DateTime.ParseExact(data[3], "yyyy-MM-dd HH:mm:ss,fff",
+                           System.Globalization.CultureInfo.InvariantCulture)
+                    });
                 }
             }
 
@@ -243,30 +146,30 @@ namespace ChristmasTreeDeliveryApp3
 
             // note: we allow to buy only one tree with same tree name for same requestor.
 
-            var saveThis = new TreeObjectDtoData
+            var saveThis = new OrderedTree
             {
-                TreeName = name,
-                TreeType = type,
-                TreeDeliveredTo = to,
-                TreeDeliveredDate = DateTime.UtcNow
+                Name = name,
+                Type = type,
+                DeliveryAddress = to,
+                DeliveryDate = DateTime.UtcNow
             };
 
             string sss = "";
 
             // Add text
-            sss += saveThis.TreeName;
+            sss += saveThis.Name;
             // Add text
             sss += ";";
             // Add text
-            sss += saveThis.TreeType;
+            sss += saveThis.Type;
             // Add text
             sss += ";";
             // Add text
-            sss += saveThis.TreeDeliveredTo;
+            sss += saveThis.DeliveryAddress;
             // Add text
             sss += ";";
             // Add text
-            sss += saveThis.TreeDeliveredDate.ToString("yyyy-MM-dd HH:mm:ss,fff");
+            sss += saveThis.DeliveryDate.ToString("yyyy-MM-dd HH:mm:ss,fff");
             // Add text
             sss += ";";
 
@@ -298,5 +201,6 @@ namespace ChristmasTreeDeliveryApp3
         ConiferTree = 2,
         CypressTree = 3,
         FirTree = 4,
+        Special = 5,
     }
 }

@@ -2,7 +2,7 @@
 {
     public interface IDatabase
     {
-        List<TreeObjectDtoData> GetAllTrees(PresentsType type);
+        List<OrderedTree> GetAllTrees(PresentsType type);
 
         ResultAfterSave SaveTree(string name, PresentsType type, string to);
     }
