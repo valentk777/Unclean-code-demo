@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using System.Text;
 using ChristmasTreeDeliveryApp3.DtoData;
 using ChristmasTreeDeliveryApp3.Enums;
@@ -101,9 +101,9 @@ namespace ChristmasTreeDeliveryApp3
             var ivalue = BitConverter.ToInt32(hashed, 0);
             // add int
             HashId += ivalue;
-            
+
             return HashId;
-        } 
+        }
 
         /// <summary>
         /// This function only save to file new provided request.
@@ -200,10 +200,22 @@ namespace ChristmasTreeDeliveryApp3
                 writter.WriteLine(sss);
                 writter.Close();
 
-                return new Tuple<bool, TreeObjectDtoData?>(false, saveThis );
+                return new Tuple<bool, TreeObjectDtoData?>(false, saveThis);
             }
 
-            return new Tuple<bool, TreeObjectDtoData?>(true, saveThis );
+            return new Tuple<bool, TreeObjectDtoData?>(true, saveThis);
         }
     }
 }
+
+
+public enum PresentsType
+{
+    RedcedarTree = 0,
+    CedarTree = 1,
+    ConiferTree = 2,
+    CypressTree = 3,
+    FirTree = 4,
+}
+
+

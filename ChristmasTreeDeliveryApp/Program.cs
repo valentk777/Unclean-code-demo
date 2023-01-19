@@ -12,7 +12,7 @@ namespace ChristmasTreeDeliveryApp
                 .ConfigureServices((context, services) =>
                 {
                     services.AddTransient<ChristmasTreeDeliveryApp>();
-                    //services.AddSingleton<FileService>();
+                    //ervices.AddSingleton<FileService>();
                     //services.AddSingleton<IPrimeService, PrimeService>();
                     //services.AddSingleton<IPrimeService, PrimeServiceSlow>();
                 })

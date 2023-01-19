@@ -1,3 +1,4 @@
+using API;
 using ChristmasTreeDeliveryApp3.DtoData;
 using Microsoft.AspNetCore.Mvc;
 using ChristmasTreeDeliveryApp3.Enums;
@@ -16,7 +17,7 @@ namespace ChristmasTreeDeliveryApp3.Controllers
 
         [HttpGet]
         [Route("GetAllTrees")]
-        public ActionResult<List<TreeObjectDtoData>> Get1()
+        public ActionResult<List<TreeObjectDtoData>> GetAllTrees()
         {
             var trees = new List<TreeObjectDtoData>();
 
@@ -36,14 +37,9 @@ namespace ChristmasTreeDeliveryApp3.Controllers
             return Ok(trees);
         }
 
-        public class Get2Request
-        {
-            public int type { get; set; }
-        }
-
         [HttpGet]
         [Route("GetAllTreesByType")]
-        public ActionResult<List<TreeObjectDtoData>> Get2([FromQuery] Get2Request request)
+        public ActionResult<List<TreeObjectDtoData>> GetAllTreesByType([FromQuery] GetAllTreesByTreeTypeRequest request)
         {
             var trees = new List<TreeObjectDtoData>();
 
@@ -55,7 +51,7 @@ namespace ChristmasTreeDeliveryApp3.Controllers
                 {
                     if (result != null)
                     {
-                        if ((int)result.TreeType == request.type)
+                        if ((int)result.TreeType == request.Type)
                         {
                             trees.Add(result);
                         }
@@ -72,7 +68,7 @@ namespace ChristmasTreeDeliveryApp3.Controllers
 
         [Route("AddOrderOfTree")]
         [HttpPost]
-        public async Task<ActionResult> Add1([FromBody] TreeObjectDtoData data)
+        public async Task<ActionResult> AddOrderOfTree([FromBody] TreeObjectDtoData data)
         {
             var db = new Database();
             var result = db.SaveTree(data.TreeName, data.TreeType, data.TreeDeliveredTo);
