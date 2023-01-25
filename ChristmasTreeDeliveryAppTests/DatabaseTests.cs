@@ -85,15 +85,14 @@ namespace ChristmasTreeDeliveryAppTests
             // Act
 
             File.Delete("treeRecord.txt");
-
             var result = db.SaveTree("test1", PresentsType.FirTree, "my");
 
             // Assert
-            Assert.True(result.Item1);
-            Assert.NotNull(result.Item2);
-            Assert.Equal("test1", result.Item2.TreeName);
-            Assert.Equal(result.Item2.TreeDeliveredTo, "my");
-            Assert.Equal(result.Item2.TreeType, PresentsType.FirTree);
+            Assert.True(result.IsSaveWasSucessful);
+            Assert.NotNull(result.Data);
+            Assert.Equal("test1", result.Data?.Name);
+            Assert.Equal(result.Data?.DeliveryAddress, "my");
+            Assert.Equal(result.Data?.Type, PresentsType.FirTree);
         }
     }
 }

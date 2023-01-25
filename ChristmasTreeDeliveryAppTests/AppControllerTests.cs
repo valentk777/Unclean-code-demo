@@ -1,3 +1,4 @@
+using ChristmasTreeDeliveryApp3;
 using ChristmasTreeDeliveryApp3.Controllers;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -10,14 +11,15 @@ namespace ChristmasTreeDeliveryAppTests
     public class AppControllerTests
     {
         [Fact]
-        public void controllerGet1_empty_null()
+        public void controllerGetAllTrees1_empty_null()
         {
             var logger = new Mock<ILogger<AppController>>();
+            var database = new Mock<IDatabase>();
             File.Delete("treeRecord.txt");
 
-            var controller = new AppController(logger.Object);
+            var controller = new AppController(logger.Object, database.Object);
 
-            var result = controller.Get1().Result as OkObjectResult;
+            var result = controller.GetAllTrees().Result as OkObjectResult;
 
             result.Should().NotBeNull();
             using (new AssertionScope())

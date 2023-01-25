@@ -20,5 +20,12 @@
             Type = type;
             DeliveryAddress = deliveryAddress;
         }
+
+        public string ToDatabaseFormat() => 
+            $"{Name};{Type};{DeliveryAddress};{DeliveryDate.ToString("yyyy-MM-dd HH:mm:ss,fff")};";
+
+        // Note: just an option.
+        public override string ToString() => 
+            $"{Name};{Type};{DeliveryAddress};{DeliveryDate.ToString("yyyy-MM-dd HH:mm:ss,fff")};";
     }
 }
