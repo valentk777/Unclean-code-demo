@@ -1,119 +1,89 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using ChristmasTreeDeliveryApp.Contracts.Dto;
+using ChristmasTreeDeliveryApp.Domain.Integrations;
 
-namespace ChristmasTreeDeliveryApp.Api.Integration
+namespace ChristmasTreeDeliveryApp.Integrations.Database
 {
     public class FileDatabase : IDatabase
     {
-        public readonly string _databaseName = "treeRecord.txt";
+        public readonly string _recordsTableName = "recordsTable.txt";
 
-        /// <summary>
-        /// RETURN ALL trees by type.
-        /// </summary>
-        /// <param name="type">type.</param>
-        /// <exception cref="EntryPointNotFoundException"></exception>
-        public List<OrderedTree> GetAllTrees(PresentsType type)
+        public FileDatabase()
         {
-            // SOLID. Open-close principle issue :(. Make an instances of the class
-            switch (type)
-            {
-                case PresentsType.RedcedarTree:
-                case PresentsType.CedarTree:
-                case PresentsType.ConiferTree:
-                case PresentsType.CypressTree:
-                case PresentsType.FirTree:
-                    return GetOrdersByType(type);
-                default:
-                    throw new EntryPointNotFoundException();
-            }
+            LoadDatabase();
         }
 
-        // TODO: Clean current code.
-        public List<OrderedTree> GetOrdersByType(PresentsType presentType) =>
-            GetAllTrees().Where(x => x.Type == presentType).ToList();
+        private void LoadDatabase() => 
+            CreateFileIfNotExist(_recordsTableName);
 
-        /// <summary>
-        /// This function only save to file new provided request.
-        /// </summary>
-        /// <param name="name">Name.</param>
-        /// <param name="type">Tree type.</param>
-        /// <param name="to">Getter</param>
-        /// <returns></returns>
-        public bool SaveTree(OrderedTree orderedTree)
+        public List<TreeRecordDto>? GetAllRecords() => 
+            File.ReadAllLines(_recordsTableName).Select(ToTreeRecordDto).ToList();
+
+        public List<TreeRecordDto>? GetAllRecords(int type) =>
+            GetAllRecords()?.Where(x => x.Type == type).ToList();
+
+        public bool SaveOrUpdateRecord(TreeRecordDto order)
         {
-            var newHashId = GetCustomHashFunction(orderedTree.Name, orderedTree.DeliveryAddress);
+            var currentOrderKey = GetRecordKey(order);
 
-            // throw errors if not exist...
-            // how can we fix?
-            var lines = File.ReadAllLines(_databaseName);
+            var sameRecordOrDefault = GetAllRecords(order.Type)?.FirstOrDefault(record => GetRecordKey(record) == currentOrderKey);
 
-            foreach (var line in lines)
+            // NOTE: we allow to buy only one tree with same tree name for same requester.
+            if (sameRecordOrDefault == null)
             {
-                var data = line.Split(";");
-                var newName = data[0];
-                var newTo = data[2];
-                var existingHashId = GetCustomHashFunction(newName, newTo);
-
-                if (existingHashId == newHashId)
-                {
-                    return true;
-                }
+                File.AppendAllText(_recordsTableName, order.ToDatabaseFormat());
+                return true;
             }
 
-            // note: we allow to buy only one tree with same tree name for same requester.
-            try
-            {
-                File.AppendAllText(_databaseName, orderedTree.ToDatabaseFormat());
-            }
-            catch
-            {
-                File.WriteAllText(_databaseName, orderedTree.ToDatabaseFormat());
-                return false;
-            }
-
-            return true;
+            // update not implemented
+            return false;
         }
 
-        private int GetCustomHashFunction(string name, string to)
+        private TreeRecordDto ToTreeRecordDto(string order)
         {
-            var md5Hasher = MD5.Create();
-            var newHashId = 0;
+            var data = order.Split(";");
 
-            var hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(name));
-            var ivalue = BitConverter.ToInt32(hashed, 0);
-            newHashId += ivalue;
-
-            hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(to));
-            ivalue = BitConverter.ToInt32(hashed, 0);
-            newHashId += ivalue;
-
-            return newHashId;
-        }
-
-        public List<OrderedTree> GetAllTrees()
-        {
-            // Create a function named LoadDatabase (or similar and add database file creation in that function)
-            if (!File.Exists(_databaseName))
-            {
-                return new List<OrderedTree>();
-            }
-
-            return File.ReadAllLines(_databaseName).Select(line => ToOrderedTree(line)).ToList();
-        }
-
-        private OrderedTree ToOrderedTree(string tree)
-        {
-            var data = tree.Split(";");
-
-            return new OrderedTree
+            return new TreeRecordDto
             {
                 Name = data[0],
-                Type = PresentsType.ConiferTree,
+                Type = int.Parse(data[1]),
                 DeliveryAddress = data[2],
-                // TODO: create extention method 
-                DeliveryDate = DateTime.ParseExact(data[3], "yyyy-MM-dd HH:mm:ss,fff",
-                    System.Globalization.CultureInfo.InvariantCulture)
+                DeliveryDate = data[3].ToDateTime(),
             };
+        }
+
+        private int GetRecordKey(TreeRecordDto order)
+        {
+            var key = 0;
+
+            if (order.Name != null)
+            {
+                key += GetHash(order.Name);
+            }
+
+            if (order.DeliveryAddress != null)
+            {
+                key += GetHash(order.DeliveryAddress);
+            }
+
+            return key;
+        }
+
+        private int GetHash(string text)
+        {
+            var hasher = MD5.Create();
+            var hashed = hasher.ComputeHash(Encoding.UTF8.GetBytes(text));
+
+            return BitConverter.ToInt32(hashed, 0);
+        }
+
+        private void CreateFileIfNotExist(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                File.Create(filePath);
+            }
         }
     }
 }

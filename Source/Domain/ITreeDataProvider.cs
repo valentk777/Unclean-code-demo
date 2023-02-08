@@ -1,5 +1,5 @@
-﻿using ChristmasTreeDeliveryApp.Api;
-using ChristmasTreeDeliveryApp.Api.Controllers;
+﻿using ChristmasTreeDeliveryApp.Contracts.Enitites;
+using ChristmasTreeDeliveryApp.Contracts.Responses;
 
 namespace ChristmasTreeDeliveryApp.Domain
 {

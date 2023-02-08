@@ -1,5 +1,5 @@
 using ChristmasTreeDeliveryApp.Domain.Extensions;
-using ChristmasTreeDeliveryApp.Integrations.Extensions;
+using ChristmasTreeDeliveryApp.Integrations.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 

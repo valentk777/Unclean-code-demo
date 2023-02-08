@@ -1,4 +1,4 @@
-﻿namespace ChristmasTreeDeliveryApp.Api
+﻿namespace ChristmasTreeDeliveryApp.Contracts.Enitites
 {
     public enum TreeType
     {

@@ -1,4 +1,4 @@
-﻿namespace ChristmasTreeDeliveryApp.Domain.Contracts.Requests
+﻿namespace ChristmasTreeDeliveryApp.Contracts.Requests
 {
     public class GetAllOrdersByTypeRequest
     {

@@ -1,5 +1,7 @@
+using ChristmasTreeDeliveryApp.Contracts.Enitites;
+using ChristmasTreeDeliveryApp.Contracts.Requests;
+using ChristmasTreeDeliveryApp.Contracts.Responses;
 using ChristmasTreeDeliveryApp.Domain;
-using ChristmasTreeDeliveryApp.Domain.Contracts.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChristmasTreeDeliveryApp.Api.Controllers
@@ -53,8 +55,13 @@ namespace ChristmasTreeDeliveryApp.Api.Controllers
 
         [HttpPost]
         [Route("order")]
-        public async Task<ActionResult> OrderTree([FromBody] OrderTreeRequest request)
+        public ActionResult OrderTree([FromBody] OrderTreeRequest request)
         {
+            if (request.OrderedTree == null)
+            {
+                return Ok();
+            }
+
             var result = _treeDataProvider.SaveTree(request.OrderedTree);
 
             if (result)

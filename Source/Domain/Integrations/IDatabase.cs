@@ -1,11 +1,13 @@
-﻿namespace ChristmasTreeDeliveryApp.Api.Integration
+﻿using ChristmasTreeDeliveryApp.Contracts.Dto;
+
+namespace ChristmasTreeDeliveryApp.Domain.Integrations
 {
     public interface IDatabase
     {
-        List<OrderedTree> GetAllTrees(PresentsType type);
+        List<TreeRecordDto>? GetAllRecords();
 
-        List<OrderedTree> GetAllTrees();
+        List<TreeRecordDto>? GetAllRecords(int type);
 
-        ResultAfterSave SaveTree(OrderedTree orderedTree);
+        bool SaveOrUpdateRecord(TreeRecordDto order);
     }
 }

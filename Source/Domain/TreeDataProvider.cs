@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ChristmasTreeDeliveryApp.Api;
-using ChristmasTreeDeliveryApp.Api.Controllers;
-using ChristmasTreeDeliveryApp.Api.Integration;
+﻿using ChristmasTreeDeliveryApp.Contracts.Enitites;
+using ChristmasTreeDeliveryApp.Contracts.Responses;
+using ChristmasTreeDeliveryApp.Domain.Extensions;
+using ChristmasTreeDeliveryApp.Domain.Integrations;
 
 namespace ChristmasTreeDeliveryApp.Domain
 {
@@ -20,32 +16,53 @@ namespace ChristmasTreeDeliveryApp.Domain
 
         public GetAllOrdersResponse GetAllOrderedTrees()
         {
+            var orders = _database
+                .GetAllRecords()
+                ?.Where(x => x.DeliveryAddress != null)
+                .Select(x => x.ToOrder())
+                .ToList();
 
+            return new GetAllOrdersResponse()
+            {
+                Orders = orders
+            };
         }
 
         public GetAllOrdersByTypeResponse GetAllOrderedTrees(TreeType type)
         {
-            throw new NotImplementedException();
+            var orders = _database
+                .GetAllRecords((int)type)
+                ?.Where(x => x.DeliveryAddress != null)
+                .Select(x => x.ToOrder())
+                .ToList();
+
+            return new GetAllOrdersByTypeResponse()
+            {
+                Orders = orders
+            };
         }
 
         public GetAllTreesResponse GetAllTrees()
         {
-            var result = _database.GetAllTrees();
+            var trees = _database.GetAllRecords()?.Select(x => x.ToTree()).ToList();
 
-            return new GetAllOrdersResponse()
+            return new GetAllTreesResponse()
             {
-                Orders = result
+                Trees = trees
             };
         }
 
         public GetAllTreesByTypeResponse GetAllTrees(TreeType type)
         {
-            throw new NotImplementedException();
+            var trees = _database.GetAllRecords((int)type)?.Select(x => x.ToTree()).ToList();
+
+            return new GetAllTreesByTypeResponse()
+            {
+                Trees = trees
+            };
         }
 
-        public bool SaveTree(Order order)
-        {
-            throw new NotImplementedException();
-        }
+        public bool SaveTree(Order order) =>
+            _database.SaveOrUpdateRecord(order.ToRecordDto());
     }
 }

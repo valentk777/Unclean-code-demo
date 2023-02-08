@@ -1,5 +1,4 @@
-﻿using ChristmasTreeDeliveryApp.Api.Integration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace ChristmasTreeDeliveryApp.Domain.Extensions
 {

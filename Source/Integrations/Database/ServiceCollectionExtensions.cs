@@ -1,7 +1,7 @@
-﻿using ChristmasTreeDeliveryApp.Api.Integration;
+﻿using ChristmasTreeDeliveryApp.Domain.Integrations;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ChristmasTreeDeliveryApp.Integrations.Extensions
+namespace ChristmasTreeDeliveryApp.Integrations.Database
 {
     public static class ServiceCollectionExtensions
     {
