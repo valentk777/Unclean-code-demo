@@ -1,4 +1,5 @@
 using ChristmasTreeDeliveryApp3;
+using ChristmasTreeDeliveryApp3.Enums;
 
 namespace ChristmasTreeDeliveryAppTests
 {

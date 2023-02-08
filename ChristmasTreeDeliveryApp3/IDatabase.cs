@@ -1,4 +1,5 @@
-﻿namespace ChristmasTreeDeliveryApp3
+﻿using ChristmasTreeDeliveryApp3.Enums;
+namespace ChristmasTreeDeliveryApp3
 {
     public interface IDatabase
     {

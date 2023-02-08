@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using ChristmasTreeDeliveryApp3.Enums;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace ChristmasTreeDeliveryApp3
@@ -192,15 +193,5 @@ namespace ChristmasTreeDeliveryApp3
 
             return new ResultAfterSave(true, saveThis);
         }
-    }
-
-    public enum PresentsType
-    {
-        RedcedarTree = 0,
-        CedarTree = 1,
-        ConiferTree = 2,
-        CypressTree = 3,
-        FirTree = 4,
-        Special = 5,
     }
 }

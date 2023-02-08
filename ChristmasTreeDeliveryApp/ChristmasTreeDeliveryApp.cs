@@ -3,14 +3,12 @@
     internal class ChristmasTreeDeliveryApp
     {
         /// <summary>
-        /// This is a default constructor
+        /// User interface. 
         /// </summary>
-        public ChristmasTreeDeliveryApp()
-        {
-        }
-
         public void StartService()
         {
+            const string deilverATree = "1";
+            const string closeProgram = "0";
             try
             {
                 while (true)
@@ -19,42 +17,52 @@
                         "\n[1] deliver a tree" +
                         "\n[0] close program");
 
-                    string o = Console.ReadLine();
+                    string? userInput = GetUserInput();
 
-                    if (o == "1")
+                    switch (userInput)
                     {
-                        try
-                        {
-                            Console.WriteLine("selected 1");
-                        }
-                        catch (Exception ex)
-                        {
-                            // this time we do not want to handle error as normally
-                            Console.WriteLine("selected 0");
-
-                            if (File.Exists("error_file.txt"))
+                        case deilverATree:
+                            try
                             {
-                                StreamWriter file = new("error_file.txt", append: false);
-                                file.WriteLine(ex);
-                                continue;
-                                file.Close();
+                                Console.WriteLine("selected 1");
                             }
-                        }
-                    }
-                    else if (o == "0")
-                    {
-                        Console.WriteLine("selected 0");
-                        break;
+                            catch (Exception ex)
+                            {
+                                // this time we do not want to handle error as normally
+                                Console.WriteLine("selected 0");
+
+                                if (File.Exists("error_file.txt"))
+                                {
+                                    StreamWriter file = new("error_file.txt", append: false);
+                                    file.WriteLine(ex);
+                                    continue;
+                                }
+                            }
+                            break;
+                        case closeProgram:
+                            Console.WriteLine("selected 0");
+                            break;
+
+                        default:
+                            Console.WriteLine("Selected wrong option, please enter [1] or [0]");
+                            continue;
                     }
                 }
             }
             catch
             {
-                // Alex: 2007-05-17.
-                // This is juts to make sure your app works oki.
                 // TODO: improve error in the future
                 Console.WriteLine("we find error");
             }
+        }
+
+        /// <summary>
+        /// Gets user input from console.
+        /// </summary>
+        /// <returns></returns>
+        private static string? GetUserInput()
+        {
+            return Console.ReadLine();
         }
     }
 }
